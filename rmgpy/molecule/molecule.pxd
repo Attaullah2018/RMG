@@ -54,6 +54,10 @@ cdef class Atom(Vertex):
 
     cpdef Vertex copy(self)
 
+    cpdef bint is_electron(self)
+
+    cpdef bint is_proton(self)
+
     cpdef bint is_hydrogen(self)
 
     cpdef bint is_non_hydrogen(self)
@@ -87,7 +91,11 @@ cdef class Atom(Vertex):
     cpdef increment_radical(self)
 
     cpdef decrement_radical(self)
-    
+
+    cpdef increment_charge(self)
+
+    cpdef decrement_charge(self)
+
     cpdef set_lone_pairs(self, int lone_pairs)
     
     cpdef increment_lone_pairs(self)
@@ -161,6 +169,10 @@ cdef class Molecule(Graph):
     cpdef bint has_atom(self, Atom atom)
 
     cpdef bint has_bond(self, Atom atom1, Atom atom2)
+
+    cpdef bint is_electron(self)
+
+    cpdef bint is_proton(self)
 
     cpdef bint contains_surface_site(self)
     
