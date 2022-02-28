@@ -4832,6 +4832,7 @@ def average_kinetics(kinetics_list):
             alpha=alpha,
             V0=(V0,'V'),
             Ea=(Ea * 0.001, "kJ/mol"),
+            comment="Only one reaction or BM with E0 < 0. Averaged from {} reactions.".format(len(kinetics_list)),
             )
     elif isinstance(kinetics, ArrheniusChargeTransfer):
         averaged_kinetics = ArrheniusChargeTransfer(
@@ -4841,11 +4842,13 @@ def average_kinetics(kinetics_list):
             alpha=alpha,
             V0=(V0,'V'),
             Ea=(Ea * 0.001, "kJ/mol"),
+            comment="Only one reaction or BM with E0 < 0. Averaged from {} reactions.".format(len(kinetics_list)),
             )
     else:
         averaged_kinetics = Arrhenius(
             A=(10 ** logA, Aunits),
             n=n,
             Ea=(Ea * 0.001, "kJ/mol"),
+            comment="Only one reaction or BM with E0 < 0. Averaged from {} reactions.".format(len(kinetics_list)),
         )
     return averaged_kinetics
