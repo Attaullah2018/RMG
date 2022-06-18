@@ -892,7 +892,7 @@ class Reaction:
              "diffusion factor {0.2g} evaluated at {1} K.").format(
                 diffusion_factor, T))
 
-    def fix_barrier_height(self, force_positive=False):
+    def fix_barrier_height(self, force_positive=False, solvent="", apply_solvation_correction=True):
         """
         Turns the kinetics into Arrhenius (if they were ArrheniusEP)
         and ensures the activation energy is at least the endothermicity
@@ -947,6 +947,8 @@ class Reaction:
                         self, self.kinetics.Ea.value_si / 1000., Ea / 1000.))
                     self.kinetics.Ea.value_si = Ea
             if isinstance(self.kinetics, (Arrhenius, StickingCoefficient, ArrheniusChargeTransfer)):  # SurfaceArrhenius is a subclass of Arrhenius
+                if apply_solvation_correction and solvent and self.kinetics.solute:
+                    self.apply_solvent_correction(solvent)
                 Ea = self.kinetics.Ea.value_si
                 if H0 >= 0 and Ea < H0:
                     self.kinetics.Ea.value_si = H0
@@ -974,6 +976,12 @@ class Reaction:
                                 " kJ/mol.".format(self.kinetics.Ea.value_si / 1000., self))
                     self.kinetics.Ea.value_si = 0
 
+    def apply_solvent_correction(self, solvent):
+        """
+        apply kinetic solvent correction
+        """
+        return NotImplementedError("solvent correction is particular to library, depository and template reactions")
+
     def reverse_arrhenius_rate(self, k_forward, reverse_units, Tmin=None, Tmax=None):
         """
         Reverses the given k_forward, which must be an Arrhenius type.
@@ -994,6 +1002,7 @@ class Reaction:
             klist[i] = kf.get_rate_coefficient(Tlist[i]) / self.get_equilibrium_constant(Tlist[i])
         kr = Arrhenius()
         kr.fit_to_data(Tlist, klist, reverse_units, kf.T0.value_si)
+        kr.solute = kf.solute
         return kr
 
     def reverse_surface_arrhenius_rate(self, k_forward, reverse_units, Tmin=None, Tmax=None):
@@ -1017,6 +1026,7 @@ class Reaction:
             klist[i] = kf.get_rate_coefficient(Tlist[i]) / self.get_equilibrium_constant(Tlist[i])
         kr = SurfaceArrhenius()
         kr.fit_to_data(Tlist, klist, reverse_units, kf.T0.value_si)
+        kr.solute = kf.solute
         return kr
 
     def reverse_sticking_coeff_rate(self, k_forward, reverse_units, surface_site_density, Tmin=None, Tmax=None):
@@ -1043,6 +1053,7 @@ class Reaction:
                 self.get_equilibrium_constant(Tlist[i], surface_site_density=surface_site_density)
         kr = SurfaceArrhenius()
         kr.fit_to_data(Tlist, klist, reverse_units, kf.T0.value_si)
+        kr.solute = kf.solute
         return kr
 
     def reverse_surface_charge_transfer_rate(self, k_forward, reverse_units, Tmin=None, Tmax=None):
@@ -1068,6 +1079,7 @@ class Reaction:
             klist[i] = kf.get_rate_coefficient(Tlist[i],V0) / self.get_equilibrium_constant(Tlist[i],V0)
         kr = SurfaceChargeTransfer(alpha=kf.alpha.value, electrons=-1*self.electrons, V0=(V0,'V'))
         kr.fit_to_data(Tlist, klist, reverse_units, kf.T0.value_si)
+        kr.solute = kf.solute
         return kr
 
     def reverse_arrhenius_charge_transfer_rate(self, k_forward, reverse_units, Tmin=None, Tmax=None):
@@ -1091,6 +1103,7 @@ class Reaction:
             klist[i] = kf.get_rate_coefficient(Tlist[i],V0) / self.get_equilibrium_constant(Tlist[i],V0)
         kr = ArrheniusChargeTransfer(alpha=kf.alpha.value, electrons=-1*self.electrons, V0=(V0,'V'))
         kr.fit_to_data(Tlist, klist, reverse_units, kf.T0.value_si)
+        kr.solute = kf.solute
         return kr
 
     def generate_reverse_rate_coefficient(self, network_kinetics=False, Tmin=None, Tmax=None, surface_site_density=0):

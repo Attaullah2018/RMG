@@ -84,7 +84,7 @@ cdef class Reaction:
     cpdef bint is_isomorphic(self, Reaction other, bint either_direction=?, bint check_identical=?,
                              bint check_only_label=?, bint check_template_rxn_products=?, bint generate_initial_map=?,
                              bint strict=?, bint save_order=?) except -2
-    
+
     cpdef double _apply_CHE_model(self, double T)
 
     cpdef double get_enthalpy_of_reaction(self, double T)
@@ -115,7 +115,7 @@ cdef class Reaction:
 
     cpdef double get_surface_rate_coefficient(self, double T, double surface_site_density, double potential=?) except -2
 
-    cpdef fix_barrier_height(self, bint force_positive=?)
+    cpdef fix_barrier_height(self, bint force_positive=?, str solvent=?, bint apply_solvation_correction=?)
 
     cpdef reverse_arrhenius_rate(self, Arrhenius k_forward, str reverse_units, Tmin=?, Tmax=?)
 
