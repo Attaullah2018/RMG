@@ -22,7 +22,7 @@ requirements:
     - pyrdl
     - python
     - quantities
-    - rdkit >=2018
+    - rdkit >=2020.03.3.0
     - scipy
     - setuptools
   run:
@@ -34,6 +34,7 @@ requirements:
     - coolprop
     - coverage
     - cython >=0.25.2
+    - diffeqpy
     - ffmpeg
     - gprof2dot
     - graphviz
@@ -47,6 +48,7 @@ requirements:
     - mpmath
     - muq2
     - networkx
+    - nomkl
     - nose
     - numdifftools
     - {{ pin_compatible('numpy') }}
@@ -56,14 +58,15 @@ requirements:
     - pydas >=1.0.2
     - pydot
     - pydqed >=1.0.1
+    - pyjulia
     - pymongo
     - pyparsing
     - pyrdl
-    - python
+    - pyrms
+    - python >=3.7
     - pyyaml
-    - pyzmq
     - quantities
-    - rdkit >=2018
+    - rdkit >=2020.03.3.0
     - rmgdatabase >=3.2.0
     - scikit-learn
     - scipy
