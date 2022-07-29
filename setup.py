@@ -32,8 +32,8 @@ import os
 from collections import OrderedDict
 
 try:
-    from distutils.core import setup
-    from distutils.extension import Extension
+    from setuptools import setup
+    from setuptools import Extension 
 except ImportError:
     print('The distutils package is required to build or install RMG Py.')
     raise
