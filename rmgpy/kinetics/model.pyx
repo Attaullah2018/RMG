@@ -198,6 +198,7 @@ cdef class KineticsModel:
         """
         raise NotImplementedError('Unexpected call to KineticsModel.get_rate_coefficient(); '
                                   'you should be using a class derived from KineticsModel.')
+    
 
     cpdef to_html(self):
         """
@@ -237,14 +238,11 @@ cdef class KineticsModel:
             return False
 
         if isinstance(other_kinetics, (StickingCoefficient, StickingCoefficientBEP)):
-            for T in [500, 1000, 1500, 2000]:
-                if abs(self.get_sticking_coefficient(T) - other_kinetics.get_sticking_coefficient(T)) > 1e-5:
-                    return False
+            return False
 
-        else: 
-            for T in [500, 1000, 1500, 2000]:
-                if abs(log10(self.get_rate_coefficient(T)) - log10(other_kinetics.get_rate_coefficient(T))) > 0.5:
-                    return False
+        for T in [500, 1000, 1500, 2000]:
+            if abs(log10(self.get_rate_coefficient(T)) - log10(other_kinetics.get_rate_coefficient(T))) > 0.5:
+                return False
         return True
 
     cpdef bint is_identical_to(self, KineticsModel other_kinetics) except -2:
