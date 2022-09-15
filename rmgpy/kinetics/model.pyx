@@ -38,6 +38,8 @@ from libc.math cimport log10
 
 import rmgpy.quantity as quantity
 from rmgpy.molecule import Molecule
+from rmgpy.kinetics.surface import StickingCoefficient, StickingCoefficientBEP
+
 
 ################################################################################
 
@@ -234,9 +236,15 @@ cdef class KineticsModel:
         if other_kinetics.is_pressure_dependent():
             return False
 
-        for T in [500, 1000, 1500, 2000]:
-            if abs(log10(self.get_rate_coefficient(T)) - log10(other_kinetics.get_rate_coefficient(T))) > 0.5:
-                return False
+        if isinstance(other_kinetics, (StickingCoefficient, StickingCoefficientBEP)):
+            for T in [500, 1000, 1500, 2000]:
+                if abs(self.get_sticking_coefficient(T) - other_kinetics.get_sticking_coefficient(T)) > 1e-5:
+                    return False
+
+        else: 
+            for T in [500, 1000, 1500, 2000]:
+                if abs(log10(self.get_rate_coefficient(T)) - log10(other_kinetics.get_rate_coefficient(T))) > 0.5:
+                    return False
         return True
 
     cpdef bint is_identical_to(self, KineticsModel other_kinetics) except -2:
