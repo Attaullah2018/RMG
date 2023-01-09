@@ -4324,7 +4324,7 @@ class KineticsFamily(Database):
                     if type(rxns[i].kinetics) != KineticsModel:
                         if rxns[i].kinetics.solute:
                             rxns[i].kinetics.solute = to_soluteTSdata(rxns[i].kinetics.solute,reactants=rxns[i].reactants)
-                    rrev = Reaction(reactants=products, products=reacts,
+                        rrev = Reaction(reactants=products, products=reacts,
                                     kinetics=rxns[i].generate_reverse_rate_coefficient(), rank=rxns[i].rank)
                     rrev.is_forward = False
 
