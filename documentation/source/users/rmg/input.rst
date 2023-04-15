@@ -469,6 +469,22 @@ For example ::
 			  branchingRatioMax=1.0,
 		)
 
+Advanced Setting: Deadend Radical Elimination (RMS Reactors only)
+-----------------------------------------------------------------
+There are many important low-flux pathways that consume radicals, such as chain transfer and chain termination reactions in polymerization.
+Each of these reactions is often low-flux, but the overall flux is non-negligible, since it controls the radical concentration.
+These pathways are difficult for flux criterion or branching criterion to identify, which lead to the existence of deadend radicals in the
+generated mechanism, i.e., radicals that are only consumed by very slow reverse reactions.
+Deadend radical elimination feature is designed to identify important chain transfer and termination edge reactions based on 
+their contribution to radical consumption and termination.
+
+For example ::
+
+		model(
+				toleranceMoveToCore=0.01,
+				toleranceReactionToCoreDeadendRadical=0.01,
+		)
+
 Advanced Setting:  Radical Flux Criterion (RMS Reactors Only)
 --------------------------------------------------------------
 At high radical concentrations important products can accumulate from termination reactions. In these cases
