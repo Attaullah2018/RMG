@@ -6,7 +6,7 @@ channels:
 dependencies:
   - cairo
   - cairocffi
-  - cantera::cantera ==2.4.0
+  - cantera::cantera
   - conda-forge::cclib >=1.6.3
   - rmg::chemprop
   - coolprop
@@ -23,6 +23,7 @@ dependencies:
   - markupsafe
   - matplotlib >=1.5
   - conda-forge::mopac
+  - conda-forge::libgfortran-ng>=10.0
   - mpmath
   - rmg::muq2
   - networkx
